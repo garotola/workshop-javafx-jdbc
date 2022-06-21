@@ -3,19 +3,28 @@ package gui;
 import model.entities.Department;
 import model.services.DepartmentService;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import app.App;
+import gui.util.Alerts;
+import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class DepartmentListController implements Initializable{
@@ -38,8 +47,9 @@ public class DepartmentListController implements Initializable{
         tableViewDepartment.setItems(obsList);
     }
     
-    @FXML public void onActionBtAdd(){
-        System.out.println("Click");
+    @FXML public void onActionBtAdd(ActionEvent event){
+        
+        createDialogForm("/gui/DepartmentForm.fxml", Utils.currentStage(event));
     }
     
 
@@ -54,7 +64,24 @@ public class DepartmentListController implements Initializable{
         tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         Stage stage = (Stage)App.getMainScene().getWindow();
-        tableViewDepartment.prefHeightProperty().bind(stage.heightProperty()); // Fazer com a tabela acompanhe a altura da janela
+        tableViewDepartment.prefHeightProperty().bind(stage.heightProperty()); // Fazer com que a tabela acompanhe a altura da janela
+    }
+
+    private void createDialogForm(String absoluteName, Stage currentStage){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            Pane pane = loader.load();
+            Stage formStage = new Stage();
+            formStage.setTitle("Novo Departamento");
+            formStage.setScene(new Scene(pane));
+            formStage.setResizable(false); //  Nao pode ser redimensionado
+            formStage.initOwner(currentStage); // Janela Pai
+            formStage.initModality(Modality.WINDOW_MODAL); // A janela pai não funciona enquanto a atual estiver aberta
+            formStage.showAndWait();
+
+        } catch (IOException e) {
+            Alerts.showAlert("Erro ao criar o formulário", "Erro", "", AlertType.ERROR);
+        }
     }
     
 }

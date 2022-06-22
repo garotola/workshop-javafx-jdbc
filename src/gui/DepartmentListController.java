@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import app.App;
 import gui.util.Alerts;
 import gui.util.Utils;
+import gui.util.listeners.DataChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,7 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class DepartmentListController implements Initializable{
+public class DepartmentListController implements Initializable, DataChangeListener{
 
     private DepartmentService service; // Injeção de dependencia e inversao de controle
     @FXML private TableView<Department> tableViewDepartment;
@@ -75,6 +76,7 @@ public class DepartmentListController implements Initializable{
             controller.setDepartment(department);
             controller.updateFormData();
             controller.setDepartmentService(new DepartmentService());
+            controller.subscribeDataChangeListener(this);
             Stage formStage = new Stage();
             formStage.setTitle("Novo Departamento");
             formStage.setScene(new Scene(pane)); // 
@@ -86,6 +88,11 @@ public class DepartmentListController implements Initializable{
         } catch (IOException e) {
             Alerts.showAlert("Erro ao criar o formulário", "Erro", "", AlertType.ERROR);
         }
+    }
+
+    @Override
+    public void onDataChanged() {
+       updateTableView();        
     }
     
 }

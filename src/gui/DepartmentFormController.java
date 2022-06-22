@@ -3,16 +3,22 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import Db.DbException;
+import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import model.entities.Department;
+import model.services.DepartmentService;
 
 public class DepartmentFormController implements Initializable{
-
+    private DepartmentService service;
     private Department entity;
     @FXML private Button btSave;
     @FXML private Button btCancel;
@@ -24,11 +30,23 @@ public class DepartmentFormController implements Initializable{
         entity = department;
     }
 
-    public void onBtSaveAction(){
-        System.out.println("OnBtSave");
+    public void onBtSaveAction(ActionEvent event){
+        if(service == null || entity == null) throw new IllegalStateException("Departamento ou Serviço vazios");
+        try{
+            entity = getFormData();
+            service.updateOrSave(entity);
+            Utils.currentStage(event).close();
+        }catch(DbException e){
+            Alerts.showAlert("Erro ao salvar o departamento", null, e.getMessage(), AlertType.ERROR);
+        }
     }
-    public void onBtCancelAction(){
-        System.out.println("OnBtCancel");
+    
+    private Department getFormData() {
+        return new Department(Utils.tryParseInt(txtId.getText()), txtName.getText());
+    }
+
+    public void onBtCancelAction(ActionEvent event){
+        Utils.currentStage(event).close();
     }
 
     @Override
@@ -46,6 +64,10 @@ public class DepartmentFormController implements Initializable{
         if(entity == null) throw new IllegalStateException("Departamento Vazio");
         txtId.setText(String.valueOf(entity.getId()));
         txtName.setText(entity.getName());
+    }
+
+    public void setDepartmentService(DepartmentService departmentService) {
+        this.service = departmentService;
     }
     
 }

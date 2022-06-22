@@ -73,7 +73,7 @@ public class DepartmentListController implements Initializable{
             Pane pane = loader.load();
             Stage formStage = new Stage();
             formStage.setTitle("Novo Departamento");
-            formStage.setScene(new Scene(pane));
+            formStage.setScene(new Scene(pane)); // 
             formStage.setResizable(false); //  Nao pode ser redimensionado
             formStage.initOwner(currentStage); // Janela Pai
             formStage.initModality(Modality.WINDOW_MODAL); // A janela pai não funciona enquanto a atual estiver aberta

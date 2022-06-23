@@ -10,13 +10,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DepartmentFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="412.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DepartmentFormController">
    <children>
-      <GridPane layoutX="20.0" layoutY="14.0" prefHeight="90.0" prefWidth="360.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <GridPane layoutX="20.0" layoutY="14.0" prefHeight="90.0" prefWidth="378.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="124.0" minWidth="10.0" prefWidth="60.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="187.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="113.0" minWidth="10.0" prefWidth="113.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="165.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="147.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -26,11 +26,11 @@
          <children>
             <Label text="ID" />
             <Label text="NOME" GridPane.rowIndex="1" />
-            <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" />
-            <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="txtId" editable="false" prefHeight="24.0" prefWidth="142.0" GridPane.columnIndex="1" />
+            <TextField fx:id="txtName" prefHeight="24.0" prefWidth="162.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <HBox prefHeight="24.0" prefWidth="180.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <Button fx:id="btSave" mnemonicParsing="false" onAction="#onBtSaveAction" text="Adicionar" />
+                  <Button fx:id="btSave" mnemonicParsing="false" onAction="#onBtSaveAction" text="Salvar" />
                   <Button fx:id="btCancel" mnemonicParsing="false" onAction="#onBtCancelAction" text="Cancelar" />
                </children>
                <GridPane.margin>

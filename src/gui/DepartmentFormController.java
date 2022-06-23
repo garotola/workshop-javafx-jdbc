@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import Db.DbException;
 import gui.util.Alerts;
@@ -18,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import model.entities.Department;
+import model.exceptions.ValidationException;
 import model.services.DepartmentService;
 
 public class DepartmentFormController implements Initializable{
@@ -47,6 +50,8 @@ public class DepartmentFormController implements Initializable{
             Utils.currentStage(event).close();
         }catch(DbException e){
             Alerts.showAlert("Erro ao salvar o departamento", null, e.getMessage(), AlertType.ERROR);
+        }catch(ValidationException e){
+            setErrosMessages(e.getErrors());
         }
     }
     
@@ -57,7 +62,14 @@ public class DepartmentFormController implements Initializable{
     }
 
     private Department getFormData() {
-        return new Department(Utils.tryParseInt(txtId.getText()), txtName.getText());
+        Department department = new Department();
+        ValidationException exception = new ValidationException("Erro de Validação");
+        department.setId(Utils.tryParseInt(txtId.getText()));
+        if(txtName.getText() == null || txtName.getText().trim().equals(""))
+            exception.addError("name", "O campo nao pode ser vazio");
+        department.setName(txtName.getText());
+        if(exception.getErrors().size() > 0) throw exception;
+        return department;
     }
 
     public void onBtCancelAction(ActionEvent event){
@@ -85,4 +97,11 @@ public class DepartmentFormController implements Initializable{
         this.service = departmentService;
     }
     
+    private void setErrosMessages(Map<String, String> map){
+        Set<String> fields = map.keySet();
+        if(fields.contains("name")) {
+            labelErrorName.setText(map.get("name"));
+        }
+    }
+
 }

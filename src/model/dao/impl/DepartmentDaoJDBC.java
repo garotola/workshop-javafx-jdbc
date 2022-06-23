@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import Db.DataBase;
+import Db.DataBaseIntegrityException;
 import Db.DbException;
 import model.dao.DepartmentDao;
 import model.entities.Department;
@@ -81,7 +82,7 @@ public class DepartmentDaoJDBC implements DepartmentDao{
             int rowsAffected = st.executeUpdate();
             if(rowsAffected == 0) throw new DbException("Id não Encontrado.");
         }catch(SQLException e){
-            throw new DbException(e.getMessage());
+            throw new DataBaseIntegrityException(e.getMessage());
         }finally{
             DataBase.closeStatement(st);
         }

@@ -3,6 +3,7 @@ package gui;
 import model.entities.Seller;
 import model.services.SellerService;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -10,6 +11,7 @@ import java.util.ResourceBundle;
 import Db.DataBaseIntegrityException;
 import app.App;
 import gui.util.Alerts;
+import gui.util.Utils;
 import gui.util.listeners.DataChangeListener;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -36,6 +38,9 @@ public class SellerListController implements Initializable, DataChangeListener{
     @FXML private TableView<Seller> tableViewSeller;
     @FXML private TableColumn<Seller, String> tableColumnName;
     @FXML private TableColumn<Seller, Integer> tableColumnId;
+    @FXML private TableColumn<Seller, String> tableColumnEmail;
+    @FXML private TableColumn<Seller, Date> tableColumnBirthDate;
+    @FXML private TableColumn<Seller, Double> tableColumnBaseSalary;
     @FXML private Button btAdd;
     @FXML private TableColumn<Seller, Seller> tableColumnEdit;
     @FXML private TableColumn<Seller, Seller> tableColumnRemove;
@@ -70,6 +75,11 @@ public class SellerListController implements Initializable, DataChangeListener{
         //Inicializar as tabelas
         tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+        Utils.formatTableColumnDate(tableColumnBirthDate, "dd/MM/yyyy");
+        tableColumnBaseSalary.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
+        Utils.formatTableColumnDouble(tableColumnBaseSalary, 2);
         Stage stage = (Stage)App.getMainScene().getWindow();
         tableViewSeller.prefHeightProperty().bind(stage.heightProperty()); // Fazer com que a tabela acompanhe a altura da janela
     }

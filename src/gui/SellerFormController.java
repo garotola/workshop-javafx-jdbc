@@ -1,6 +1,8 @@
 package gui;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -30,10 +33,17 @@ public class SellerFormController implements Initializable{
     private Seller entity;
     @FXML private Button btSave;
     @FXML private Button btCancel;
+    // Campos de Inserção
     @FXML private TextField txtId;
     @FXML private TextField txtName;
+    @FXML private TextField txtEmail;
+    @FXML private DatePicker dtBirthDate;
+    @FXML private TextField txtBaseSalary;
+    // Campos de Erros
     @FXML private Label labelErrorName; 
-    
+    @FXML private Label labelErrorEmail; 
+    @FXML private Label labelErrorBirthDate; 
+    @FXML private Label labelErrorBaseSalary; 
     public void setSeller(Seller seller){
         entity = seller;
     }
@@ -85,13 +95,19 @@ public class SellerFormController implements Initializable{
 
     private void initializeNodes(){
         Constraints.setTextFieldInteger(txtId);
-        Constraints.setTextFieldMaxLength(txtName, 30);
+        Constraints.setTextFieldMaxLength(txtName, 70);
+        Constraints.setTextFieldDouble(txtBaseSalary);
+        Constraints.setTextFieldMaxLength(txtEmail, 100);
+        Utils.formatDatePicker(dtBirthDate, "dd/MM/yyyy");
     }
 
     public void updateFormData(){
         if(entity == null) throw new IllegalStateException("Vendedor Vazio");
         txtId.setText(String.valueOf(entity.getId()));
         txtName.setText(entity.getName());
+        txtEmail.setText(entity.getEmail());
+        txtBaseSalary.setText(String.valueOf(entity.getBaseSalary()));
+        if(entity.getBirthDate() != null) dtBirthDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
     }
 
     public void setSellerService(SellerService sellerService) {

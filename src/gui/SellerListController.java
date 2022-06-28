@@ -1,6 +1,7 @@
 package gui;
 
 import model.entities.Seller;
+import model.services.DepartmentService;
 import model.services.SellerService;
 
 import java.io.IOException;
@@ -93,7 +94,8 @@ public class SellerListController implements Initializable, DataChangeListener{
             SellerFormController controller = loader.getController();
             controller.setSeller(seller);
             controller.updateFormData();
-            controller.setSellerService(new SellerService());
+            controller.setServices(new SellerService(), new DepartmentService());
+            controller.loadAssociateObjects();
             controller.subscribeDataChangeListener(this);
             Stage formStage = new Stage();
             formStage.setTitle("Novo vendedor");
@@ -161,4 +163,6 @@ public class SellerListController implements Initializable, DataChangeListener{
             }
         }
     }
+
+    
 }

@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -90,9 +92,27 @@ public class SellerFormController implements Initializable{
         Seller seller = new Seller();
         ValidationException exception = new ValidationException("Erro de Validação");
         seller.setId(Utils.tryParseInt(txtId.getText()));
+        
         if(txtName.getText() == null || txtName.getText().trim().equals(""))
             exception.addError("name", "O campo nao pode ser vazio");
         seller.setName(txtName.getText());
+
+        if(txtEmail.getText() == null || txtEmail.getText().trim().equals(""))
+            exception.addError("email", "O campo nao pode ser vazio");
+        seller.setEmail(txtEmail.getText());
+        
+        if(dtBirthDate.getValue() == null) exception.addError("birthDate", "O campo nao pode ser vazio");
+        else{
+            Instant instant = Instant.from(dtBirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+            seller.setBirthDate(Date.from(instant));
+        }
+
+        if(txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals(""))
+            exception.addError("baseSalary", "O campo nao pode ser vazio");
+        seller.setBaseSalary(Utils.tryParseDouble(txtBaseSalary.getText()));
+
+        seller.setDepartment(comboBoxDepartment.getValue());
+
         if(exception.getErrors().size() > 0) throw exception;
         return seller;
     }
@@ -123,8 +143,8 @@ public class SellerFormController implements Initializable{
         txtEmail.setText(entity.getEmail());
         txtBaseSalary.setText(String.valueOf(entity.getBaseSalary()));
         if(entity.getBirthDate() != null) dtBirthDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
-        if(entity.getDepartment() != null)comboBoxDepartment.setValue(entity.getDepartment());
-        else comboBoxDepartment.getSelectionModel().selectFirst();
+        if(entity.getDepartment() == null) comboBoxDepartment.getSelectionModel().selectFirst();
+        else comboBoxDepartment.setValue(entity.getDepartment());
     }
 
     public void loadAssociateObjects(){
@@ -142,9 +162,12 @@ public class SellerFormController implements Initializable{
     
     private void setErrosMessages(Map<String, String> map){
         Set<String> fields = map.keySet();
-        if(fields.contains("name")) {
-            labelErrorName.setText(map.get("name"));
-        }
+        
+        labelErrorName.setText((fields.contains("name") ? map.get("name") : ""));
+        labelErrorEmail.setText((fields.contains("email") ? map.get("email") : ""));
+        labelErrorBaseSalary.setText((fields.contains("baseSalary") ? map.get("baseSalary") : ""));
+        labelErrorBirthDate.setText((fields.contains("birthDate") ? map.get("birthDate") : ""));
+
     }
 
     private void initializeComboBoxDepartment(){
